@@ -1,0 +1,41 @@
+# BitwiseOperations in Python
+import math
+
+def encrypt(message, key):
+    encrypted = []
+    # Create columns and read characters column by column
+    for i in range(key):
+        for j in range(i, len(message), key):
+            encrypted.append(message[j])
+    return ''.join(encrypted)
+
+def decrypt(encrypted, key):
+    num_rows = math.ceil(len(encrypted) / key)
+    num_full_cols = len(encrypted) % key
+    num_short_cols = key - num_full_cols
+
+    # Initialize an empty list to hold the decrypted message
+    decrypted = [''] * len(encrypted)
+    col = 0
+    row = 0
+
+    # Fill the decrypted message column by column
+    for i in range(len(encrypted)):
+        decrypted[i] = encrypted[col]
+        row += 1
+        if (row == num_rows) or (col < num_short_cols and row == num_rows - 1):
+            col += 1
+            row = 0
+    
+    return ''.join(decrypted)
+
+# Example usage:
+message = "HELLOWORLD"
+key = 4
+
+encrypted = encrypt(message, key)
+decrypted = decrypt(encrypted, key)
+
+print(f"Original: {message}")
+print(f"Encrypted: {encrypted}")
+print(f"Decrypted: {decrypted}")

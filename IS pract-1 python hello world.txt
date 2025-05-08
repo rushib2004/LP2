@@ -1,0 +1,21 @@
+# BitwiseOperations in Python
+
+text = "Hello World"
+mask = 127  # Bit mask (0111 1111)
+
+# Print header for the table
+print("Character | AND  | OR   | XOR")
+print("-------------------------------")
+
+# Loop through each character in the string
+for ch in text:
+    # Get the ASCII value of the character
+    ascii_value = ord(ch)
+
+    # Perform bitwise operations
+    and_result = ascii_value & mask
+    or_result = ascii_value | mask
+    xor_result = ascii_value ^ mask
+
+    # Print the results in the formatted table
+    print(f"    {ch}     | {and_result:3}  | {or_result:3}  | {xor_result:3}")

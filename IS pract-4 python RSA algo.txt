@@ -1,0 +1,44 @@
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives import serialization
+import base64
+
+# Step 1: Generate public and private keys
+private_key = rsa.generate_private_key(
+    public_exponent=65537,
+    key_size=2048
+)
+
+public_key = private_key.public_key()
+
+# Step 2: Original message
+message = "HELLO RSA"
+
+# Step 3: Encrypt the message using the public key
+encrypted = public_key.encrypt(
+    message.encode(),
+    padding.OAEP(
+        mgf=padding.MGF1(algorithm=hashes.SHA256()),
+        algorithm=hashes.SHA256(),
+        label=None
+    )
+)
+
+# Encode the encrypted message in Base64
+encrypted_base64 = base64.b64encode(encrypted).decode()
+
+# Step 4: Decrypt the message using the private key
+decrypted = private_key.decrypt(
+    base64.b64decode(encrypted_base64),
+    padding.OAEP(
+        mgf=padding.MGF1(algorithm=hashes.SHA256()),
+        algorithm=hashes.SHA256(),
+        label=None
+    )
+)
+
+# Step 5: Print results
+print(f"Original Message : {message}")
+print(f"Encrypted Message: {encrypted_base64}")
+print(f"Decrypted Message: {decrypted.decode()}")
