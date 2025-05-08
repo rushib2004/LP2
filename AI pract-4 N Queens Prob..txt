@@ -1,0 +1,52 @@
+# Function to check if a queen can be placed on board[row][col]
+def isSafe(board, row, col):
+    # Check left side of the current row
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+
+    # Check upper diagonal on left side
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+
+    # Check lower diagonal on left side
+    for i, j in zip(range(row, len(board), 1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+
+    return True
+
+# Recursive function to solve N-Queen problem
+def solveNQUtil(board, col):
+    if col >= len(board):
+        return True
+
+    for i in range(len(board)):
+        if isSafe(board, i, col):
+            board[i][col] = 1
+            if solveNQUtil(board, col + 1):
+                return True
+            board[i][col] = 0  # BACKTRACK
+
+    return False
+
+# Main function to solve the N Queen problem
+def solveNQ():
+    board = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ]
+
+    if not solveNQUtil(board, 0):
+        print("Solution does not exist")
+        return False
+
+    printSolution(board)
+    return True
+
+# Run the N Queen solver
+solveNQ()
+
