@@ -1,0 +1,34 @@
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.util.Base64;
+
+public class SimpleDES {
+
+    public static void main(String[] args) throws Exception {
+        // Original message
+        String message = "HELLODES";
+
+        // Generate a secret key for DES
+        KeyGenerator keyGen = KeyGenerator.getInstance("DES");
+        SecretKey key = keyGen.generateKey();
+
+        // Create Cipher instance for DES
+        Cipher cipher = Cipher.getInstance("DES");
+
+        // Encrypt the message
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        byte[] encryptedBytes = cipher.doFinal(message.getBytes());
+        String encrypted = Base64.getEncoder().encodeToString(encryptedBytes);
+
+        // Decrypt the message
+        cipher.init(Cipher.DECRYPT_MODE, key);
+        byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encrypted));
+        String decrypted = new String(decryptedBytes);
+
+        // Show results
+        System.out.println("Original Message : " + message);
+        System.out.println("Encrypted Message: " + encrypted);
+        System.out.println("Decrypted Message: " + decrypted);
+    }
+}

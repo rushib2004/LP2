@@ -1,0 +1,37 @@
+public class TranspositionCipher {
+
+    public static String encrypt(String message, int key) {
+        StringBuilder encrypted = new StringBuilder();
+        for (int i = 0; i < key; i++) {
+            for (int j = i; j < message.length(); j += key) {
+                encrypted.append(message.charAt(j));
+            }
+        }
+        return encrypted.toString();
+    }
+
+    public static String decrypt(String encrypted, int key) {
+        int numRows = (int) Math.ceil((double) encrypted.length() / key);
+        char[] decrypted = new char[encrypted.length()];
+        int index = 0;
+
+        for (int i = 0; i < key; i++) {
+            for (int j = i; j < encrypted.length(); j += key) {
+                decrypted[j] = encrypted.charAt(index++);
+            }
+        }
+        return new String(decrypted);
+    }
+
+    public static void main(String[] args) {
+        String message = "HELLOWORLD";
+        int key = 4;
+
+        String encrypted = encrypt(message, key);
+        String decrypted = decrypt(encrypted, key);
+
+        System.out.println("Original : " + message);
+        System.out.println("Encrypted: " + encrypted);
+        System.out.println("Decrypted: " + decrypted);
+    }
+}

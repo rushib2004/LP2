@@ -1,0 +1,19 @@
+public class BitwiseOperations {
+    public static void main(String[] args) {
+        String text = "Hello World ";
+        int mask = 127; // Bit mask (0111 1111)
+
+        System.out.println("Character | AND  | OR   | XOR");
+        System.out.println("-------------------------------");
+
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+
+            int andResult = ch & mask;
+            int orResult = ch | mask;
+            int xorResult = ch ^ mask;
+
+            System.out.printf("    %c     | %3d  | %3d  | %3d%n", ch, andResult, orResult, xorResult);
+        }
+    }
+}

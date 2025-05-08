@@ -1,0 +1,41 @@
+import javax.crypto.KeyAgreement;
+import javax.crypto.interfaces.DHPublicKey;
+import javax.crypto.spec.DHParameterSpec;
+import java.security.*;
+import java.util.Base64;
+
+public class SimpleDiffieHellman {
+
+    public static void main(String[] args) throws Exception {
+        // Step 1: Generate KeyPair for User A
+        KeyPairGenerator keyGenA = KeyPairGenerator.getInstance("DH");
+        keyGenA.initialize(2048); // Key size
+        KeyPair pairA = keyGenA.generateKeyPair();
+
+        // Step 2: Generate KeyPair for User B using A's public parameters
+        DHParameterSpec dhParamSpec = ((DHPublicKey) pairA.getPublic()).getParams();
+        KeyPairGenerator keyGenB = KeyPairGenerator.getInstance("DH");
+        keyGenB.initialize(dhParamSpec);
+        KeyPair pairB = keyGenB.generateKeyPair();
+
+        // Step 3: Each user creates their KeyAgreement object
+        KeyAgreement keyAgreeA = KeyAgreement.getInstance("DH");
+        keyAgreeA.init(pairA.getPrivate());
+        keyAgreeA.doPhase(pairB.getPublic(), true);
+
+        KeyAgreement keyAgreeB = KeyAgreement.getInstance("DH");
+        keyAgreeB.init(pairB.getPrivate());
+        keyAgreeB.doPhase(pairA.getPublic(), true);
+
+        // Step 4: Generate shared secrets
+        byte[] secretA = keyAgreeA.generateSecret();
+        byte[] secretB = keyAgreeB.generateSecret();
+
+        // Step 5: Print secrets
+        System.out.println("Secret Key A: " + Base64.getEncoder().encodeToString(secretA));
+        System.out.println("Secret Key B: " + Base64.getEncoder().encodeToString(secretB));
+
+        // Step 6: Check if both keys are equal
+        System.out.println("Keys Match: " + java.util.Arrays.equals(secretA, secretB));
+    }
+}
